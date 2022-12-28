@@ -9,6 +9,8 @@
 - tesseract-ocr
 - 其他依赖详见 requriments.txt
 
+### 如需在docker中运行，请移步 [sxhgb_docker](export https_proxy=http://127.0.0.1:7891;export http_proxy=http://127.0.0.1:7891;export all_proxy=socks5://127.0.0.1:7891)
+
 ## 学习步骤
 
 1. 安装 Python
@@ -21,7 +23,7 @@ git clone https://github.com/tustxsfh/sxhgb_v4.git
  ```python
  pip -r install requriments.txt
  ```
-5. python main.py
+5. 运行
 ```python
 python main.py
 ```
