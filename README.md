@@ -9,7 +9,7 @@
 - tesseract-ocr
 - 其他依赖详见 requriments.txt
 
-### 如需在docker中运行，请移步 [sxhgb_docker](export https_proxy=http://127.0.0.1:7891;export http_proxy=http://127.0.0.1:7891;export all_proxy=socks5://127.0.0.1:7891)
+### 如需在docker中运行，请移步 [sxhgb_docker]
 
 ## 学习步骤
 
