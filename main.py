@@ -29,10 +29,10 @@ src = './'
 start_time = time.time()
 
 
-ume: str = 'u0139529'
-pwd: str = 'u0139529'
-name: str = 'zsm'
-hour_goal = 100     # 年度目标学时
+ume: str = '******'        # YOUR ID
+pwd: str = '******'        # YOUR PASSWORD
+name: str = 'YOURNAME'     # YOUR NAME
+hour_goal = 100            # 年度目标学时 YOU CAN CHANGE IT.
 
 
 
