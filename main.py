@@ -24,7 +24,7 @@ browser = webdriver.Chrome(chrome_options=chrome_options)
 browser.implicitly_wait(60 * 3)
 browser.maximize_window()
 
-src = './SXHGB/'          
+src = './'          
 
 start_time = time.time()
 
