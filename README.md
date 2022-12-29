@@ -27,6 +27,7 @@ git clone https://github.com/tustxsfh/sxhgb_v4.git
 ```python
 python main.py
 ```
+6. 按提示填入帐号、密码、学习时长等信息
 
 ## api 说明
 
