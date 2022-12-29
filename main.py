@@ -50,7 +50,7 @@ def login(ume:str, pwd:str, name:str='用户'):  # 登录函数
         # ActionChains(browser).send_keys_to_element(password, pwd).perform()
         # password.send_keys(pwd)  # 此处填入密码
         # 获取截图
-        browser.get_screenshot_as_file(src+'tempimg/screenshot.png')
+        browser.get_screenshot_as_file(src+'/screenshot.png')
 
         # 获取指定元素位置
         element = browser.find_element(By.ID, 'img')
@@ -60,11 +60,11 @@ def login(ume:str, pwd:str, name:str='用户'):  # 登录函数
         bottom = int(element.location['y'] + element.size['height'])
 
         # 通过Image处理图像
-        im = Image.open(src+'tempimg/screenshot.png')
+        im = Image.open(src+'/screenshot.png')
         im = im.crop((left, top, right, bottom))
-        im.save(src+'tempimg/random.png')
+        im.save(src+'/random.png')
 
-        img = Image.open(src+'tempimg/random.png')
+        img = Image.open(src+'/random.png')
         code = pytesseract.image_to_string(img)
 
         randomcode = browser.find_element(By.ID, 'randomCode')
