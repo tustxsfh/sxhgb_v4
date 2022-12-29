@@ -19,7 +19,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 # 使用无头模式打开chrome
 chrome_options = Options()
-# chrome_options.add_argument('--headless')
+chrome_options.add_argument('--headless')
 browser = webdriver.Chrome(chrome_options=chrome_options)
 browser.implicitly_wait(60 * 3)
 browser.maximize_window()
@@ -29,12 +29,12 @@ src = './'
 start_time = time.time()
 
 
-ume: str = '******'        # YOUR ID
-pwd: str = '******'        # YOUR PASSWORD
-name: str = 'YOURNAME'     # YOUR NAME
-hour_goal = 100            # 年度目标学时 YOU CAN CHANGE IT.
 
-
+ume: str = input('请输入您的帐号(必填) :  ')        # YOUR ID                                                                                                                           
+pwd: str = input('请输入您的密码（必填）:  ')        # YOUR PASSWORD
+name: str = input('请输入您的名字:  ') or '用户'      # YOUR NAME
+hour_goal: str = input('您的年度学习目标是多少小时,默认为100.  ')       # 年度目标学时 YOU CAN CHANGE IT.
+hour_goal = lambda hour_goal:int(hour_goal) if hour_goal.isnumeric() else 100
 
 def login(ume:str, pwd:str, name:str='用户'):  # 登录函数
     try:
