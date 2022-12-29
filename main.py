@@ -33,8 +33,8 @@ start_time = time.time()
 ume: str = input('请输入您的帐号(必填) :  ')        # YOUR ID                                                                                                                           
 pwd: str = input('请输入您的密码（必填）:  ')        # YOUR PASSWORD
 name: str = input('请输入您的名字:  ') or '用户'      # YOUR NAME
-hour_goal: str = input('您的年度学习目标是多少小时,默认为100.  ')       # 年度目标学时 YOU CAN CHANGE IT.
-hour_goal = lambda hour_goal:int(hour_goal) if hour_goal.isnumeric() else 100
+hour_goal: int = input('您的年度学习目标是多少小时？  ')       # 年度目标学时 YOU CAN CHANGE IT.
+
 
 def login(ume:str, pwd:str, name:str='用户'):  # 登录函数
     try:
@@ -635,7 +635,7 @@ if __name__ == "__main__":
         
         T = chaxun(name)
         
-        if T > hour_goal:
+        if T > int(hour_goal):
             
             print('年度学习任务已完成')
             time.sleep(20)
