@@ -24,19 +24,18 @@ browser = webdriver.Chrome(chrome_options=chrome_options)
 browser.implicitly_wait(60 * 3)
 browser.maximize_window()
 
-src = './'          
+src = './'
 
 start_time = time.time()
 
 
-
-ume: str = input('请输入您的帐号(必填) :  ')        # YOUR ID                                                                                                                           
+ume: str = input('请输入您的帐号(必填) :  ')        # YOUR ID
 pwd: str = input('请输入您的密码（必填）:  ')        # YOUR PASSWORD
 name: str = input('请输入您的名字:  ') or '用户'      # YOUR NAME
 hour_goal: int = input('您的年度学习目标是多少小时？  ')       # 年度目标学时 YOU CAN CHANGE IT.
 
 
-def login(ume:str, pwd:str, name:str='用户'):  # 登录函数
+def login(ume: str, pwd: str, name: str = '用户'):  # 登录函数
     try:
         # 登录页面
         login_url = "https://www.sxgbxx.gov.cn/login"
@@ -71,22 +70,33 @@ def login(ume:str, pwd:str, name:str='用户'):  # 登录函数
         randomcode.send_keys(code)
         browser.find_element(By.CLASS_NAME, 'bm-lr-btn').click()
 
-        time.sleep(10)              
+        time.sleep(10)
 
     except WebDriverException:
         print("webdriver 异常")
 
+
 def chaxun(name):               # 查询函数
     chaxun_url = 'https://www.sxgbxx.gov.cn/uc/home'
     browser.get(chaxun_url)
-    shichang = browser.find_element(By.XPATH, '/html/body/div[1]/div[1]/div[4]/section[1]/div/div/div[2]/div/p/span[3]').text
+    shichang = browser.find_element(
+        By.XPATH, '/html/body/div[1]/div[1]/div[4]/section[1]/div/div/div[2]/div/p/span[3]').text
     name = name
     print(name+'登录成功')
     print(shichang)
     T = re.findall(r'\d+', shichang)[1]
     T = int(T)
-    return T
-    
+
+    if T > int(hour_goal):
+
+            print('年度学习任务已完成')
+            time.sleep(20)
+            browser.quit()
+            exit()
+
+    else:   
+        return T
+
     
 
 def find_peixun():
@@ -418,8 +428,9 @@ def peixun():
 
         # sum = len(cou_url_list)
     for pei_url in cou_url_list:
-        print('-----------------------------------------------------------------------------------')
         chaxun(name)
+        print('-----------------------------------------------------------------------------------')
+        
         print(pei_url)
         
         browser.get(pei_url)
@@ -635,35 +646,34 @@ if __name__ == "__main__":
         
         T = chaxun(name)
         
-        if T > int(hour_goal):
+        # if T > int(hour_goal):
             
-            print('年度学习任务已完成')
-            time.sleep(20)
-            browser.quit()
-            exit()
+        #     print('年度学习任务已完成')
+        #     time.sleep(20)
+        #     browser.quit()
+        #     exit()
             
-        else:       
+       
+        # 获取专题培训url
+        # find_peixun()
 
-            # 获取专题培训url
-            # find_peixun()
+        # 获取课程url
+        # find_course()
 
-            # 获取课程url
-            # find_course()
+        # 完成课程学习功能
+        # print(name+"课程学习开始")
+        # kecheng_random()
+        keicheng()
+        # print(name+"课程学习结束")
 
-            # 完成课程学习功能
-            # print(name+"课程学习开始")
-            # kecheng_random()
-            keicheng()
-            # print(name+"课程学习结束")
+        # 完成专题培训学习功能
+        print(name+"专题培训开始")
 
-            # 完成专题培训学习功能
-            print(name+"专题培训开始")
-
-            peixun()               # 顺序学习
-            # peixun_random()           # 随机学习
-            # print(name+"专题培训结束")
-            time.sleep(10)
-            print('**************************************************************************************************************************')
+        peixun()               # 顺序学习
+        # peixun_random()           # 随机学习
+        # print(name+"专题培训结束")
+        time.sleep(10)
+        print('**************************************************************************************************************************')
 
     try:
         study()
@@ -673,8 +683,8 @@ if __name__ == "__main__":
 
 
 
-browser.quit()
-exit()
+    browser.quit()
+    exit()
 
 
     
