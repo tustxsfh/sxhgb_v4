@@ -1,5 +1,8 @@
 # sxhgb_v4 山西好干部在线学习
 
+## 本项目只用于个人学习，严禁用于非法用途
+
+
 ## 学习环境
 
 - Python 3.8 
@@ -21,7 +24,7 @@ git clone https://github.com/tustxsfh/sxhgb_v4.git
 ```
 4. 安装依赖
  ```python
- pip -r install requriments.txt
+ pip install -r requriments.txt
  ```
 5. 运行
 ```python
@@ -51,5 +54,4 @@ python main.py
 
 - keicheng()    kecheng_random()    peixun()    peixun_random()     使用一个即可，其余注释掉。  
 
-- 默认使用  kecheng_random() 课程按顺序学习
-
+- 默认使用  kecheng() peixun()
