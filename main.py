@@ -32,20 +32,27 @@ start_time = time.time()
 ume: str = input('请输入您的帐号(必填) :  ')        # YOUR ID
 pwd: str = input('请输入您的密码（必填）:  ')        # YOUR PASSWORD
 name: str = input('请输入您的名字:  ') or '用户'      # YOUR NAME
-hour_goal: int = input('您的年度学习目标是多少小时？  ')       # 年度目标学时 YOU CAN CHANGE IT.
+hour_goal: int = input('您的年度学习目标是多少小时？默认为80  ') or int(80)      # 年度目标学时 YOU CAN CHANGE IT.
 
 
-def find_something(url, totalpage_xpath, cour_xpath):
+def find_something(url: str, totalpage_xpath: str, cour_xpath: str):
+    """
+        查找页面所有课程的url和title
+        url: 页面的url
+        totalpage_page: 共?页 标签的XPATH
+        cour_xpath:     课程标题的XPATH
+    """
+
     browser.get(url)
     time.sleep(2)
     TotalPage = browser.find_element(
         By.XPATH, totalpage_xpath).text
     TotalPage = re.findall(r'\d+', TotalPage)[0]
     # print(TotalPage)
-    TotalPage = int(TotalPage)    
+    TotalPage = int(TotalPage)
     page = 1
-    url_lists = []  
-    title_lists = []  
+    url_lists = []
+    title_lists = []
 
     while page < TotalPage+1:
         cour_list = browser.find_elements(
@@ -59,14 +66,16 @@ def find_something(url, totalpage_xpath, cour_xpath):
         time.sleep(2)
         page += 1
         browser.find_element(By.ID, 'nextpage').click()
-    return(url_lists,title_lists)
-
+    return (url_lists, title_lists)
 
 
 def login(ume: str, pwd: str, name: str = '用户'):  # 登录函数
+    """
+        用户登录函数
+    """
     try:
         # 登录页面
-        login_url = "https://www.sxgbxx.gov.cn/login"
+        login_url = "https://www.sxgbxx.gov.cn/login"            # sxhgb首页
         browser.get(login_url)
 
         username = browser.find_element(By.ID, "userEmail")
@@ -105,6 +114,10 @@ def login(ume: str, pwd: str, name: str = '用户'):  # 登录函数
 
 
 def chaxun(name):               # 查询函数
+    """
+        查询用户年度学习时长，返回时长T
+        如果T大于用户年度学习目标时长，则退出程序
+    """
     chaxun_url = 'https://www.sxgbxx.gov.cn/uc/home'
     browser.get(chaxun_url)
     shichang = browser.find_element(
@@ -127,14 +140,17 @@ def chaxun(name):               # 查询函数
 
 
 def sign_up():
-    """专题培训报名"""
+    """
+    专题培训报名 对所有当前正在进行当中的专题培训报名
+    """
     print('专题培训报名')
-    
+
     baoming_url = 'https://www.sxgbxx.gov.cn/front/getplanApplyList'
     totalpage_xpath = '//*[@id="aCoursesList"]/section/section[2]/div[3]/span'
     cour_xpath = '//*[@id="aCoursesList"]/section/section[2]/div[2]/div/ul/li/div/div/h3/a'
-    url_lists = find_something(url=baoming_url, totalpage_xpath=totalpage_xpath, cour_xpath=cour_xpath)[0]
-    
+    url_lists = find_something(
+        url=baoming_url, totalpage_xpath=totalpage_xpath, cour_xpath=cour_xpath)[0]
+
     for url in url_lists:
         browser.get(url)
         time.sleep(2)
@@ -192,6 +208,9 @@ def find_peixun():
 
 
 def find_course():
+    """
+    下载所有课程的url
+    """
     # 课程列表
     print('下载课程url')
     cou_url = "https://www.sxgbxx.gov.cn/front/showCourseList"
@@ -201,7 +220,7 @@ def find_course():
     time.sleep(10)
 
     f1 = open(src+'cou_url.txt', 'w')
-    f2 = open(src+'cou_name.txt', 'w')
+    # f2 = open(src+'cou_name.txt', 'w')
 
     page = 0
     TotalPage = browser.find_element(
@@ -221,37 +240,46 @@ def find_course():
             f1.write(cou['href'])
             f1.write('\n')
 
-            f2.write(cou.get_text())
+            # f2.write(cou.get_text())
 
-            f2.write('\n')
+            # f2.write('\n')
         browser.find_element(By.ID, 'nextpage').click()
         time.sleep(2)
         page += 1
     f1.close()
-    f2.close()
+    # f2.close()
 
     print('课程url下载成功')
 
 
 def find_undo_course():
+    """
+    下载所有未完成课程的url
+    """
     undo_url = 'https://www.sxgbxx.gov.cn/uc/course_tzc?status=1'
     totalpage_xpath = '/html/body/div[1]/div[1]/div[4]/section[2]/div/div/article/div[3]/div/span'
     cour_xpath = '/html/body/div[1]/div[1]/div[4]/section[2]/div/div/article/div[2]/div/div/ul/li/div/div[2]/div/a'
-    url_list = find_something(url=undo_url, totalpage_xpath=totalpage_xpath, cour_xpath=cour_xpath)[0]
+    url_list = find_something(
+        url=undo_url, totalpage_xpath=totalpage_xpath, cour_xpath=cour_xpath)[0]
     # print(url_list)
-    with open('undo.txt','w+') as f:
+    with open('undo.txt', 'w+') as f:
         for url in url_list:
             f.write(url+'\n')
 
-def time_counter():
 
+def time_counter():
+    """
+    按分计时
+    """
     end_time = time.time()
     study_time = (end_time - start_time) / 60
     print('已学习%s分' % study_time)
 
 
 def day_counter():
-
+    """
+    按天计时
+    """
     end_time = time.time()
     study_time = (end_time - start_time) / 60   # 以分为单位
     study_time = int(study_time)                # 取整
@@ -263,13 +291,16 @@ def day_counter():
     print('已学习%s天%s时%s分' % (dtime, htime, mtime))
 
 
-
 def xuexi(url):
+
+    """
+    提供单个学习页面的url，自动开始学习
+    """
     browser.get(url)
     # print(browser.page_source)
 
     browser.find_element(By.XPATH,
-                            '//*[@id="aCoursesList"]/div/div[2]/div/div[1]/div/div[2]/div[2]/div/ul/li').click()  # 切换到培训内容详情页
+                         '//*[@id="aCoursesList"]/div/div[2]/div/div[1]/div/div[2]/div[2]/div/ul/li').click()  # 切换到培训内容详情页
     # print(browser.page_source)
     cou_obj = BeautifulSoup(browser.page_source, 'lxml')
     time.sleep(3)
@@ -353,10 +384,12 @@ def xuexi(url):
             print('\n')
             print('\n')
             browser.refresh()
-            
-            
-def shunxu_xuexi(url_file:str):
-    
+
+
+def shunxu_xuexi(url_file: str):
+    """
+    按顺序进行课程学习
+    """
     with open(src + url_file, 'r') as f:
         cou_url_list = f.read().splitlines()
 
@@ -368,8 +401,13 @@ def shunxu_xuexi(url_file:str):
 
         chaxun(name)
         xuexi(cou_url)
-        
-def random_xuexi(url_file:str):
+
+
+def random_xuexi(url_file: str):
+    """
+    随机选课进行学习
+    """
+
     with open(src + url_file, 'r') as f:
         cou_url_list = f.read().splitlines()
         sum = len(cou_url_list)
@@ -383,31 +421,29 @@ def random_xuexi(url_file:str):
         print('--------------------------------------------------------------------------')
         print(cou_url)
         xuexi(cou_url)
-    
-    
 
 
 def study():
+    """
+     用户的学习操作步骤
+    """
 
-    login(ume, pwd, name)
+    login(ume, pwd, name)       # 登录
 
-    chaxun(name)
+    chaxun(name)               # 查询时长
 
-    # 专题培训报名
-    # sign_up()
+    sign_up()              # 专题培训报名
 
-    # 获取专题培训url
-    # find_peixun()
+    find_peixun()          # 获取专题培训url
 
-    # 获取课程url
-    # find_course()
-    
-    # find_undo_course()
-    
-    # shunxu_xuexi('undo.txt')
+    find_course()          # 获取课程url
+
+    find_undo_course()     # 获取未完成课程的url
+
+    # shunxu_xuexi('undo.txt')      # 按顺序学习未完成的课程
 
     # 完成课程学习功能
-    print(name+"课程学习开始")    
+    print(name+"课程学习开始")
     shunxu_xuexi('cou_url.txt')
     random_xuexi('cou_url.txt')
     print(name+"课程学习结束")
