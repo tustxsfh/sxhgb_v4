@@ -19,7 +19,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 # 使用无头模式打开chrome
 chrome_options = Options()
-# chrome_options.add_argument('--headless')
+chrome_options.add_argument('--headless')
 browser = webdriver.Chrome(chrome_options=chrome_options)
 browser.implicitly_wait(60 * 3)
 browser.maximize_window()
