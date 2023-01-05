@@ -19,8 +19,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 # 使用无头模式打开chrome
 chrome_options = Options()
-chrome_options.add_argument('--headless')
-browser = webdriver.Chrome(chrome_options=chrome_options)
+# chrome_options.add_argument('--headless')
+browser = webdriver.Chrome(options=chrome_options)
 browser.implicitly_wait(60 * 3)
 browser.maximize_window()
 
@@ -32,7 +32,8 @@ start_time = time.time()
 ume: str = input('请输入您的帐号(必填) :  ')        # YOUR ID
 pwd: str = input('请输入您的密码（必填）:  ')        # YOUR PASSWORD
 name: str = input('请输入您的名字:  ') or '用户'      # YOUR NAME
-hour_goal: int = input('您的年度学习目标是多少小时？默认为80  ') or int(80)      # 年度目标学时 YOU CAN CHANGE IT.
+# 年度目标学时 YOU CAN CHANGE IT.
+hour_goal: int = input('您的年度学习目标是多少小时？默认为80  ') or int(80)
 
 
 def find_something(url: str, totalpage_xpath: str, cour_xpath: str):
@@ -67,50 +68,6 @@ def find_something(url: str, totalpage_xpath: str, cour_xpath: str):
         page += 1
         browser.find_element(By.ID, 'nextpage').click()
     return (url_lists, title_lists)
-
-
-def login(ume: str, pwd: str, name: str = '用户'):  # 登录函数
-    """
-        用户登录函数
-    """
-    try:
-        # 登录页面
-        login_url = "https://www.sxgbxx.gov.cn/login"            # sxhgb首页
-        browser.get(login_url)
-
-        username = browser.find_element(By.ID, "userEmail")
-        ActionChains(browser).send_keys_to_element(username, ume).perform()
-        # username.send_keys(ume)  # 此处填入账号
-        password = browser.find_element(By.ID, 'userPassword')
-        ActionChains(browser).send_keys_to_element(password, pwd).perform()
-        # ActionChains(browser).send_keys_to_element(password, pwd).perform()
-        # password.send_keys(pwd)  # 此处填入密码
-        # 获取截图
-        browser.get_screenshot_as_file(src+'/screenshot.png')
-
-        # 获取指定元素位置
-        element = browser.find_element(By.ID, 'img')
-        left = int(element.location['x'])
-        top = int(element.location['y'])
-        right = int(element.location['x'] + element.size['width'])
-        bottom = int(element.location['y'] + element.size['height'])
-
-        # 通过Image处理图像
-        im = Image.open(src+'/screenshot.png')
-        im = im.crop((left, top, right, bottom))
-        im.save(src+'/random.png')
-
-        img = Image.open(src+'/random.png')
-        code = pytesseract.image_to_string(img)
-
-        randomcode = browser.find_element(By.ID, 'randomCode')
-        randomcode.send_keys(code)
-        browser.find_element(By.CLASS_NAME, 'bm-lr-btn').click()
-
-        time.sleep(10)
-
-    except WebDriverException:
-        print("webdriver 异常")
 
 
 def chaxun(name):               # 查询函数
@@ -254,7 +211,7 @@ def find_course():
 
 def find_undo_course():
     """
-    下载所有未完成课程的url
+    下载所有未完成课程的url  can not work with headless!!!
     """
     undo_url = 'https://www.sxgbxx.gov.cn/uc/course_tzc?status=1'
     totalpage_xpath = '/html/body/div[1]/div[1]/div[4]/section[2]/div/div/article/div[3]/div/span'
@@ -292,7 +249,6 @@ def day_counter():
 
 
 def xuexi(url):
-
     """
     提供单个学习页面的url，自动开始学习
     """
@@ -432,28 +388,28 @@ def study():
 
     chaxun(name)               # 查询时长
 
-    sign_up()              # 专题培训报名
+    # sign_up()              # 专题培训报名
 
     find_peixun()          # 获取专题培训url
 
     find_course()          # 获取课程url
 
-    find_undo_course()     # 获取未完成课程的url
+    # find_undo_course()     # 获取未完成课程的url Can't work in headless chrome
 
     # shunxu_xuexi('undo.txt')      # 按顺序学习未完成的课程
 
     # 完成课程学习功能
     print(name+"课程学习开始")
     shunxu_xuexi('cou_url.txt')
-    random_xuexi('cou_url.txt')
+    # random_xuexi('cou_url.txt')
     print(name+"课程学习结束")
 
     # 完成专题培训学习功能
     print(name+"专题培训开始")
 
     shunxu_xuexi('peixun_url.txt')               # 顺序学习
-    random_xuexi('peixun_url.txt')           # 随机学习
-    print(name+"专题培训结束")
+    # random_xuexi('peixun_url.txt')           # 随机学习
+    # print(name+"专题培训结束")
     time.sleep(10)
     print('**************************************************************************************************************************')
 
