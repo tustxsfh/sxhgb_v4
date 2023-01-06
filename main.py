@@ -13,9 +13,12 @@ import os
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
-
+from selenium.common.exceptions import ElementClickInterceptedException
 
 # 使用无头模式打开chrome
 chrome_options = Options()
@@ -338,7 +341,15 @@ def xuexi(url):
                 # print("本视频长%s秒" % shichang)
                 # print("已学习%d%%" % percent)
                 t = shichang * (100 - percent) * 0.01
-                browser.find_element(By.ID, id).click()
+
+                try:
+                    browser.find_element(By.ID, id).click()
+                except ElementClickInterceptedException:
+
+                    print('计时器维护中')
+                    browser.quit()
+                    exit()
+                   
                 time.sleep(3)
                 action = ActionChains(browser)
                 # title = browser.find_element_by_xpath('//*[@id="N-course-box"]/article/div/div[2]/section/h3/span')  # 鼠标移动到标题
@@ -366,7 +377,17 @@ def xuexi(url):
                 # print("本音频长%s秒" % shichang)
                 # print("已学习%d%%" % percent)
                 t = shichang * (100 - percent) * 0.01
-                browser.find_element(By.ID, 'yp_play').click()
+
+                try:
+                    browser.find_element(By.ID, id).click()
+
+                except ElementClickInterceptedException:
+
+                    print('计时器维护中')
+                    browser.quit()
+                    exit()
+                
+
                 time.sleep(t + 20)
                 print(li.get_text() + "学习完毕")
                 print('\n')
@@ -380,7 +401,16 @@ def xuexi(url):
                 if '100%' in li_html:
                     continue
                 print('读文字')
-                browser.find_element(By.ID, id).click()
+
+                try:
+                    browser.find_element(By.ID, id).click()
+                    
+                except ElementClickInterceptedException:
+
+                    print('计时器维护中')
+                    browser.quit()
+                    exit()
+                
                 time.sleep(5)
                 print(li.get_text() + "学习完毕")
                 print('\n')
@@ -490,6 +520,4 @@ if __name__ == "__main__":
         study()
         time.sleep(3)
     except:
-        print('something bad happen')
-        browser.quit()
-        exit()
+        study()
