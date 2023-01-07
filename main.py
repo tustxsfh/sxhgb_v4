@@ -520,4 +520,5 @@ if __name__ == "__main__":
         study()
         time.sleep(3)
     except:
+        print('SOMETHING BAD HAPPEN , RESTARY STUDY')
         study()
