@@ -22,7 +22,7 @@ from selenium.common.exceptions import ElementClickInterceptedException
 
 # 使用无头模式打开chrome
 chrome_options = Options()
-# chrome_options.add_argument('--headless')
+chrome_options.add_argument('--headless')
 browser = webdriver.Chrome(options=chrome_options)
 browser.implicitly_wait(60 * 3)
 browser.maximize_window()
